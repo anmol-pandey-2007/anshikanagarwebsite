@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Next Shuttle · Main Gate — P05 Prototype</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- PeerJS: lets the Control phone update the Board screen on another device -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+</head>
+<body>
+
+  <!-- HOME -->
+  <section id="home" class="view home" hidden>
+    <div class="home-card">
+      <p class="eyebrow">INT335 Design Thinking · P05 Waiting for the Shuttle</p>
+      <h1>Next-Shuttle Countdown Board</h1>
+      <p class="lead">A testing prototype. Open the <strong>Board</strong> on a laptop or tablet at the gate stop,
+        and the <strong>Control</strong> panel on a teammate's phone to report shuttle departures.</p>
+      <div class="home-actions">
+        <a class="btn btn-big" href="#board">Open Board</a>
+        <a class="btn btn-big btn-outline" href="#control">Open Control</a>
+      </div>
+      <ol class="steps">
+        <li>Open the Board on the screen at the stop. It shows a 4-digit <strong>board code</strong>.</li>
+        <li>Open Control on a phone, enter that code and press <strong>Connect</strong>.</li>
+        <li>In Control → Settings, enter the travel time from the previous stop and the walking times you measured.</li>
+        <li>When a shuttle leaves the previous stop, press <strong>Shuttle left</strong>. When it reaches the gate, press <strong>Arrived</strong>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- BOARD -->
+  <section id="board" class="view board" hidden>
+    <header class="b-head">
+      <h1>NEXT SHUTTLE · <span id="b-gate">Main Gate</span></h1>
+      <div class="b-clock" id="b-clock">--:--</div>
+    </header>
+
+    <div class="b-row b-main">
+      <span class="b-label">Next shuttle</span>
+      <span class="b-val" id="b-next">—</span>
+    </div>
+    <div class="b-seats" id="b-next-seats" hidden></div>
+
+    <div class="b-row">
+      <span class="b-label">Shuttle after that</span>
+      <span class="b-val b-val-sm" id="b-after">—</span>
+    </div>
+
+    <div class="b-walks" id="b-walks-wrap">
+      <div class="b-divider"></div>
+      <div id="b-walks"></div>
+    </div>
+
+    <div class="b-divider"></div>
+    <footer class="b-foot">
+      <span>Last updated: <strong id="b-updated">—</strong></span>
+      <span class="b-meta">
+        <span id="b-code">Connecting…</span>
+        <button class="b-fs" id="b-fs" type="button" title="Full screen">⛶</button>
+      </span>
+    </footer>
+    <p class="b-note">Prototype for a student project · estimates are reported by hand</p>
+  </section>
+
+  <!-- CONTROL -->
+  <section id="control" class="view control" hidden>
+    <header class="c-head">
+      <a href="#home" class="c-back">← Home</a>
+      <h1>Control panel</h1>
+    </header>
+
+    <div class="card">
+      <h2>1. Connect to the board</h2>
+      <div class="inline">
+        <input id="c-code" inputmode="numeric" maxlength="4" placeholder="Board code">
+        <button class="btn" id="c-connect" type="button">Connect</button>
+      </div>
+      <p class="status" id="c-status">Not connected. (On the same device, tabs sync automatically.)</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Shuttles</h2>
+      <p class="warn" id="c-need-settings" hidden>Set the travel time in Settings first.</p>
+      <button class="btn btn-big btn-wide" id="c-left" type="button">Shuttle left <span id="c-prev">previous stop</span></button>
+      <div class="inline small-gap">
+        <span>or add one that is</span>
+        <input id="c-manual" type="number" min="0" max="60" placeholder="min">
+        <span>away</span>
+        <button class="btn btn-outline" id="c-add-manual" type="button">Add</button>
+      </div>
+      <ul class="shuttles" id="c-shuttles"></ul>
+    </div>
+
+    <div class="card">
+      <h2>3. Arrival log</h2>
+      <p class="hint">Filled automatically when you press <em>Arrived</em>. Difference = actual − predicted (positive = late).</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Reported</th><th>Predicted</th><th>Actual</th><th>Diff (min)</th><th>Seats</th></tr>
+          </thead>
+          <tbody id="c-log"></tbody>
+        </table>
+      </div>
+      <p class="hint" id="c-log-summary"></p>
+      <div class="inline">
+        <button class="btn" id="c-export" type="button">Export CSV</button>
+        <button class="btn btn-danger" id="c-clear" type="button">Clear log</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>4. Settings</h2>
+      <label>Stop name on the board <input id="s-gate" type="text"></label>
+      <label>Previous stop name <input id="s-prev" type="text"></label>
+      <label>Travel time from previous stop to the gate (min, measured by you)
+        <input id="s-travel" type="number" min="1" max="60">
+      </label>
+      <label class="check"><input id="s-range" type="checkbox"> Show a range (e.g. 3–5 min) instead of one number</label>
+
+      <h3>Walking times (measured by you)</h3>
+      <ul class="walks" id="s-walks"></ul>
+      <div class="inline">
+        <input id="s-walk-block" type="text" placeholder="Block name, e.g. Block 34">
+        <input id="s-walk-min" type="number" min="1" max="60" placeholder="min">
+        <button class="btn btn-outline" id="s-walk-add" type="button">Add</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
