@@ -4,51 +4,45 @@ A web prototype of the chosen concept for **INT335 Design Thinking, Project P05:
 
 **HMW:** How might we help a day scholar at the gate stop decide quickly whether to wait for the shuttle or walk?
 
-The board at the main gate stop shows:
+## Pages
 
-- minutes until the **next shuttle** and the **shuttle after that**
-- **walking time** to each academic block, so students can compare waiting with walking
-- the **last updated** time, so students know how fresh the estimate is
-- optionally, whether the next shuttle has **seats available or is full** (idea B7)
+| Page | Address | Who uses it | What it does |
+| --- | --- | --- | --- |
+| Home | `#home` | Everyone | Overview and test-day setup steps |
+| Board | `#board` | Students at the stop | Next shuttle, shuttle after that, seats badge, walking times, board message, freshness of the data |
+| Control | `#control` | Spotter (teammate) | **Report** tab: shuttle left / minutes away, board message. **Log** tab: predicted vs actual arrivals, CSV export. **Settings** tab: stop names, travel time, walking times, range mode, backup/restore/reset |
 
 ## How it works
 
 The prototype is "Wizard of Oz": there is no GPS tracking. A teammate reports shuttles by hand.
 
-| View | Device | Who uses it |
-| --- | --- | --- |
-| **Board** (`#board`) | Laptop or tablet at the gate stop | Students waiting at the stop |
-| **Control** (`#control`) | Teammate's phone | Team member acting as the spotter |
+1. Open **Board** on a laptop or tablet at the stop. It shows a 4-digit **board code**.
+2. Open **Control** on the spotter's phone, enter the code and tap **Connect**.
+3. In **Control → Settings**, enter the travel time from the previous stop and the walking times. **Measure these yourselves.**
+4. When a shuttle leaves the previous stop, tap **Shuttle left**. When it reaches the gate, tap **Arrived**.
+5. In **Control → Log**, tap **Export CSV** to download the arrival log for the report.
 
-1. Open the Board. It shows a 4-digit **board code**.
-2. Open Control on a phone, enter the code and press **Connect**.
-3. In **Settings**, enter the travel time from the previous stop to the gate and the walking times to each block. **Measure these yourselves.**
-4. When a shuttle leaves the previous stop, press **Shuttle left**. The board starts counting down.
-5. When the shuttle reaches the gate, press **Arrived**. The arrival log records predicted vs actual time.
-6. Press **Export CSV** to download the log for the report (assumption A2: estimates within about 2 minutes).
-
-Two tabs on the same device sync automatically. Different devices sync through [PeerJS](https://peerjs.com/), which needs an internet connection on both.
+Tabs on the same device sync automatically. A board on a different device syncs through [PeerJS](https://peerjs.com/) (internet needed on both).
 
 ## Put it on GitHub Pages
 
-1. Create a new repository on GitHub, for example `p05-shuttle-board`.
+1. Create a new repository, for example `p05-shuttle-board`.
 2. Upload `index.html`, `style.css`, `app.js` and `README.md` (Add file → Upload files → Commit).
-3. Go to **Settings → Pages**, set Source to **Deploy from a branch**, Branch **main**, folder **/ (root)**, and save.
-4. After about a minute the site is live at `https://<your-username>.github.io/p05-shuttle-board/`.
-   - Board: `…/p05-shuttle-board/#board`
-   - Control: `…/p05-shuttle-board/#control`
+3. **Settings → Pages** → Source: **Deploy from a branch**, Branch: **main**, folder **/ (root)** → Save.
+4. After about a minute: `https://<your-username>.github.io/p05-shuttle-board/`
 
-## What this prototype tests
+## What it tests
 
-| Assumption | How the prototype helps |
+| Assumption | Where |
 | --- | --- |
-| A1: Students use the board to decide | Observe students at the stop while the board is running |
-| A2: Estimates are accurate within ~2 min | Arrival log + CSV export |
-| A3: Position can be reported without disrupting drivers | The spotter reports, not the driver |
-| A4: The board is readable in a crowd | Large high-contrast digits, full-screen button |
+| A1: Students use the board to decide | Watch and ask students at the stop (paper observation sheet) |
+| A2: Estimates within about 2 minutes | Control → Log (within-2-min count, CSV export) |
+| A3: Reporting without disrupting drivers | The spotter reports, not the driver; ask the driver afterwards |
+| A4: Readable in a crowd | Large high-contrast digits, full-screen button; check from different spots |
 
 ## Notes
 
-- No personal data is collected. Everything is stored in the browser (`localStorage`).
-- All numbers on the board come from what the team enters; nothing is pre-filled.
+- No names or personal details are collected.
+- All numbers come from what the team enters; nothing is pre-filled. The small board on the Home page is an illustration only.
+- Fonts: Plus Jakarta Sans and Space Grotesk (Google Fonts).
 - Built with AI assistance (Claude) for the code; this is disclosed in the project report.
